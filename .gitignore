@@ -39,3 +39,6 @@ build/
 
 ### DotEnv
 .env
+
+### 파일 정리
+*.xlsx
