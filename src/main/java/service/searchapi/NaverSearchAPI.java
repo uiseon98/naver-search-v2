@@ -31,12 +31,15 @@ public class NaverSearchAPI {
     }
 
     public List<NaverAPIResult> searchByKeyword(String keyword) throws IOException, InterruptedException {
+        // https://developers.naver.com/docs/serviceapi/search/news/news.md
         HashMap<String, String> body = new HashMap<>();
         APIClientParam param = new APIClientParam(
-                "", "", body
-                // , headers
+                "https://openapi.naver.com/v1/search/news.json?query=%s".formatted(keyword),
+                "GET",
+                body
+                 , "X-Naver-Client-Id", clientID, "X-Naver-Client-Secret", clientSecret
         );
-        apiClient.callAPI(param);
+        logger.info(apiClient.callAPI(param));
         return null;
     }
 }
