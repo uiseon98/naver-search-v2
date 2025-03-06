@@ -1,8 +1,10 @@
 package service.searchapi;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.cdimascio.dotenv.Dotenv;
 import model.dto.APIClientParam;
 import model.dto.NaverAPIResult;
+import model.dto.NaverAPIResultItem;
 import util.api.APIClient;
 import util.logger.MyLogger;
 
@@ -30,7 +32,7 @@ public class NaverSearchAPI {
         logger.info("NaverSearchAPI initailized");
     }
 
-    public List<NaverAPIResult> searchByKeyword(String keyword) throws IOException, InterruptedException {
+    public List<NaverAPIResultItem> searchByKeyword(String keyword) throws IOException, InterruptedException {
         // https://developers.naver.com/docs/serviceapi/search/news/news.md
         HashMap<String, String> body = new HashMap<>();
         APIClientParam param = new APIClientParam(
@@ -39,7 +41,8 @@ public class NaverSearchAPI {
                 body
                  , "X-Naver-Client-Id", clientID, "X-Naver-Client-Secret", clientSecret
         );
-        logger.info(apiClient.callAPI(param));
-        return null;
+//        logger.info(apiClient.callAPI(param));
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(apiClient.callAPI(param), NaverAPIResult.class).items();
     }
 }
