@@ -1,9 +1,9 @@
 package service.searchapi;
 
-import model.dto.SearchResult;
+import model.dto.NaverAPIResult;
 
 import java.util.List;
 
-public interface SearchAPI {
-    List<SearchResult> searchByKeyword(String keyword);
+public interface SearchAPI<T> {
+    List<T> searchByKeyword(String keyword);
 }
