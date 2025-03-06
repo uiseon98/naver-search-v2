@@ -19,13 +19,13 @@ public class NaverSearchAPI implements SearchAPI {
             throw new RuntimeException("NaverSearchAPI: clientID or clientSecret are missing");
         }
         this.logger = new MyLogger(NaverSearchAPI.class);
-
 //        logger.info(clientID);
 //        logger.info(clientSecret);
     }
 
     @Override
     public List<SearchResult> searchByKeyword(String keyword) {
+
         return List.of();
     }
 }
