@@ -6,13 +6,15 @@ import model.dto.NaverAPIResult;
 import util.api.APIClient;
 import util.logger.MyLogger;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
-public class NaverSearchAPI implements SearchAPI {
+public class NaverSearchAPI {
     private final String clientID;
     private final String clientSecret;
     private final MyLogger logger;
-    private final NaverAPIClient<List<NaverAPIResult>> naverAPIClient;
+    private final APIClient apiClient;
 
     public NaverSearchAPI() {
         Dotenv dotenv = Dotenv.load();
@@ -22,36 +24,19 @@ public class NaverSearchAPI implements SearchAPI {
             throw new RuntimeException("NaverSearchAPI: clientID or clientSecret are missing");
         }
         this.logger = new MyLogger(NaverSearchAPI.class);
-        this.naverAPIClient = NaverAPIClient.getInstance();
+        this.apiClient = new APIClient();
 //        logger.info(clientID);
 //        logger.info(clientSecret);
         logger.info("NaverSearchAPI initailized");
     }
 
-    static class NaverAPIClient<T> extends APIClient<T> {
-        private static NaverAPIClient<List<NaverAPIResult>> instance;
-        private NaverAPIClient() {
-            super();
-        }
-
-        public static NaverAPIClient<List<NaverAPIResult>> getInstance() {
-            if (instance == null) {
-                instance = new NaverAPIClient<>();
-            }
-            return instance;
-        }
-
-
-        @Override
-        public T callAPI(APIClientParam param) {
-            return null;
-        }
-
-    }
-
-    @Override
-    public List<NaverAPIResult> searchByKeyword(String keyword) {
-        APIClientParam param = new APIClientParam();
-        return naverAPIClient.callAPI(param);
+    public List<NaverAPIResult> searchByKeyword(String keyword) throws IOException, InterruptedException {
+        HashMap<String, String> body = new HashMap<>();
+        APIClientParam param = new APIClientParam(
+                "", "", body
+                // , headers
+        );
+        apiClient.callAPI(param);
+        return null;
     }
 }

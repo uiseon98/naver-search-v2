@@ -1,7 +1,5 @@
 import io.github.cdimascio.dotenv.Dotenv;
-import model.dto.NaverAPIResult;
 import service.searchapi.NaverSearchAPI;
-import service.searchapi.SearchAPI;
 import util.logger.MyLogger;
 
 public class Application {
@@ -11,6 +9,11 @@ public class Application {
         String searchKeyword = dotenv.get("SEARCH_KEYWORD");
         logger.info(searchKeyword);
         NaverSearchAPI searchAPI = new NaverSearchAPI();
-        searchAPI.searchByKeyword(searchKeyword);
+        try {
+            searchAPI.searchByKeyword(searchKeyword);
+        } catch (Exception e) {
+          logger.severe(e.getMessage());
+        }
+
     }
 }
