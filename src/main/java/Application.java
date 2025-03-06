@@ -1,15 +1,13 @@
 import io.github.cdimascio.dotenv.Dotenv;
-import model.dto.NaverAPIResult;
 import model.dto.NaverAPIResultItem;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import service.searchapi.NaverSearchAPI;
+import service.search.SearchService;
 import util.logger.MyLogger;
 
 import java.io.FileOutputStream;
-import java.lang.reflect.Field;
 import java.util.List;
 
 public class Application {
@@ -18,7 +16,7 @@ public class Application {
         MyLogger logger = new MyLogger(Application.class);
         String searchKeyword = dotenv.get("SEARCH_KEYWORD");
         logger.info(searchKeyword);
-        NaverSearchAPI searchAPI = new NaverSearchAPI();
+        SearchService searchAPI = new SearchService();
         try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fileOut = new FileOutputStream("%d_%s.xlsx".formatted(System.currentTimeMillis(), searchKeyword))) {
             List<NaverAPIResultItem> result = searchAPI.searchByKeyword(searchKeyword);
 //            logger.info(result.toString());
@@ -36,10 +34,10 @@ public class Application {
                 row.createCell(2).setCellValue(item.title());
                 row.createCell(3).setCellValue(item.description());
             }
-           workbook.write(fileOut);
+            workbook.write(fileOut);
 
         } catch (Exception e) {
-          logger.severe(e.getMessage());
+            logger.severe(e.getMessage());
         }
 
     }
