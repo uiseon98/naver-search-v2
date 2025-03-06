@@ -9,6 +9,7 @@ import util.logger.MyLogger;
 
 import java.io.FileOutputStream;
 import java.util.List;
+import java.util.logging.Level;
 
 public class Application {
     public static void main(String[] args) {
@@ -17,7 +18,17 @@ public class Application {
         String searchKeyword = dotenv.get("SEARCH_KEYWORD");
         logger.info(searchKeyword);
         SearchService searchAPI = new SearchService();
-        try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fileOut = new FileOutputStream("%d_%s.xlsx".formatted(System.currentTimeMillis(), searchKeyword))) {
+        String filename = "%d_%s";
+        String mode = dotenv.get("MODE");
+        if (mode.isBlank()) {
+            throw new RuntimeException("mode is missing");
+        }
+        switch (mode) {
+            case "DEV":
+                filename += "_dev";
+                break;
+        }
+        try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fileOut = new FileOutputStream(filename.formatted(System.currentTimeMillis(), searchKeyword) + ".xlsx")) {
             List<NaverAPIResultItem> result = searchAPI.searchByKeyword(searchKeyword);
 //            logger.info(result.toString());
             Sheet sheet = workbook.createSheet(searchKeyword);
@@ -35,7 +46,6 @@ public class Application {
                 row.createCell(3).setCellValue(item.description());
             }
             workbook.write(fileOut);
-
         } catch (Exception e) {
             logger.severe(e.getMessage());
         }

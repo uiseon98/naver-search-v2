@@ -41,4 +41,5 @@ build/
 .env
 
 ### 파일 정리
-*.xlsx
+# *.xlsx
+*_dev.xlsx

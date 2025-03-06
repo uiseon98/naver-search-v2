@@ -11,7 +11,20 @@ public class MyLogger {
     public MyLogger(Class<?> clazz) {
         Dotenv dotenv = Dotenv.load();
         this.logger = Logger.getLogger(clazz.getName());
-        this.logger.setLevel(Level.parse(dotenv.get("LOG_LEVEL")));
+//        this.logger.setLevel(Level.parse(dotenv.get("LOG_LEVEL")));
+//        this.logger.setLevel(dotenv.get("MODE").equals("DEV") ? Level.INFO : Level.SEVERE);
+        String mode = dotenv.get("MODE");
+        if (mode.isBlank()) {
+            throw new RuntimeException("mode is missing");
+        }
+        switch (mode) {
+            case "DEV":
+                this.logger.setLevel(Level.INFO);
+                break;
+            case "PROD":
+                this.logger.setLevel(Level.SEVERE);
+                break;
+        }
     }
 
     public void info(String msg) {
