@@ -15,9 +15,13 @@ public class NaverSearchAPI implements SearchAPI {
         Dotenv dotenv = Dotenv.load();
         this.clientID = dotenv.get("NAVER_CLIENT_ID");
         this.clientSecret = dotenv.get("NAVER_CLIENT_SECRET");
+        if (clientID == null || clientSecret == null) {
+            throw new RuntimeException("NaverSearchAPI: clientID or clientSecret are missing");
+        }
         this.logger = new MyLogger(NaverSearchAPI.class);
-        logger.info(clientID);
-        logger.info(clientSecret);
+
+//        logger.info(clientID);
+//        logger.info(clientSecret);
     }
 
     @Override
