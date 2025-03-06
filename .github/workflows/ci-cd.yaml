@@ -4,7 +4,17 @@ on:
   schedule:
     # 30분마다 실행
     - cron: '*/30 * * * *'
+  # 수동 실행 옵션
   workflow_dispatch:
+    inputs:
+      mode:
+        description: '실행 모드'
+        required: true
+        default: 'DEFAULT'
+      search_keyword:
+        description: '검색 키워드'
+        required: true
+        default: ''
 
 jobs:
   build-and-run:
@@ -38,3 +48,17 @@ jobs:
       run: |
         cd out
         java Application
+        
+    - name: 변경사항 커밋 및 푸시
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "자동 실행 결과 업데이트: ${{ github.workflow }} at $(date +'%Y-%m-%d %H:%M:%S')"
+        commit_user_name: ${{ github.repository_owner }}
+        commit_user_email: ${{ github.repository_owner }}@users.noreply.github.com
+        commit_author: "${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>"
+        # 변경된 파일만 커밋
+        add_options: '-A'
+        # 변경사항이 없으면 아무 작업도 하지 않음
+        skip_dirty_check: false
+        # GitHub에서 기본 제공하는 토큰 사용
+        token: ${{ github.token }}
